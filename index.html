@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wyo.town | Technical Solutions</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="logo">wyo.town</div>
+            <ul>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <div class="container">
+            <h1>wyo.town</h1>
+            <p>Technical leadership and solutions for growing businesses</p>
+        </div>
+    </header>
+
+    <section id="services">
+        <div class="container">
+            <h2>Services</h2>
+            <div class="services-grid">
+                <div class="service">
+                    <h3>Business Outcomes</h3>
+                    <p>Drive revenue growth, optimize operations, and reduce costs through strategic technical implementation. Proven track record of 500%+ revenue growth and successful digital transformations.</p>
+                </div>
+                <div class="service">
+                    <h3>Technical Leadership</h3>
+                    <p>Part-time CTO services, technology strategy, and architectural decisions. Bridge the gap between business goals and technical implementation with over 20 years of experience.</p>
+                </div>
+                <div class="service">
+                    <h3>Software & Data Solutions</h3>
+                    <p>Custom software development, data engineering, and analytics platforms. Specializing in Django, geospatial applications, and business intelligence solutions.</p>
+                </div>
+                <div class="service">
+                    <h3>Digital Presence</h3>
+                    <p>Professional websites, content management systems, and digital marketing solutions tailored for small to medium businesses.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio">
+        <div class="container">
+            <h2>Selected Projects</h2>
+            <div class="portfolio-grid">
+                <div class="project">
+                    <h3>Chamber of Commerce Mapping Platform</h3>
+                    <p>Interactive choropleth and heatmap generation tool using GeoDjango and LeafletJS</p>
+                </div>
+                <div class="project">
+                    <h3>Voter Mobilization Analytics</h3>
+                    <p>Comprehensive BI platform integrating Databricks with custom Django applications</p>
+                </div>
+                <div class="project">
+                    <h3>FLAVORNATOR 9000</h3>
+                    <p>IoT automation system using Raspberry Pi and ESP32 for commercial beverage production</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2>Get in Touch</h2>
+            <p>Ready to discuss your project?</p>
+            <a href="mailto:sweeney@roerick.me" class="cta-button">Contact Us</a>
+        </div>
+    </section>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html> 
