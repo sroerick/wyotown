@@ -79,6 +79,31 @@
                         <p class="outcome">$100M+ in LITEC Awards</p>
                         <p>Geographic scoring system that directly contributed to winning multiple eight-figure tax credit awards.</p>
                     </div>
+                    <div class="carousel-slide">
+                        <h3>Manufacturing Automation</h3>
+                        <p class="outcome">400% Process Efficiency</p>
+                        <p>IoT solution for beverage manufacturing, integrating hardware control systems with inventory management.</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <h3>Agricultural Data Platform</h3>
+                        <p class="outcome">20,000 Acres Mapped</p>
+                        <p>Custom mapping and data collection platform for precision agriculture, digitizing 20,000 acres of farmland maps.</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <h3>Food Safety Platform</h3>
+                        <p class="outcome">10,000 Tests/Month</p>
+                        <p>Built SCADA system for E. coli monitoring, automating PDF parsing and geocoding for real-time biohazard awareness.</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <h3>Nonprofit Crowdfunding</h3>
+                        <p class="outcome">Platform Migration Success</p>
+                        <p>Developed custom Django-based crowdfunding platform for healthcare assistance, integrating CRM and payment systems.</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <h3>Crypto Publishing System</h3>
+                        <p class="outcome">Server-Free Innovation</p>
+                        <p>Built blockchain-based publishing platform, enabling completely decentralized content delivery.</p>
+                    </div>
                 </div>
                 <div class="carousel-nav">
                     <button class="prev" aria-label="Previous slide">←</button>
@@ -104,6 +129,80 @@
             } else {
                 nav.classList.remove('scrolled');
             }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const track = document.querySelector('.carousel-track');
+            const slides = document.querySelectorAll('.carousel-slide:not(.clone)');
+            const prev = document.querySelector('.prev');
+            const next = document.querySelector('.next');
+            
+            let currentTranslate = -(100 / 3); // Start at first real slide
+            let isDragging = false;
+            let startX;
+            let currentX;
+            let walk;
+            
+            // Initialize position
+            track.style.transform = `translateX(${currentTranslate}%)`;
+
+            function smoothScroll(target) {
+                track.style.transition = 'transform 0.5s ease-out';
+                track.style.transform = `translateX(${target}%)`;
+                
+                // Reset position when reaching clone boundaries
+                track.addEventListener('transitionend', () => {
+                    track.style.transition = 'none';
+                    if (target <= -((slides.length + 2) * (100/3))) {
+                        currentTranslate = -(100/3);
+                        track.style.transform = `translateX(${currentTranslate}%)`;
+                    } else if (target >= 0) {
+                        currentTranslate = -(slides.length * (100/3));
+                        track.style.transform = `translateX(${currentTranslate}%)`;
+                    }
+                }, { once: true });
+            }
+
+            // Wheel/Trackpad Navigation
+            track.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                currentTranslate -= e.deltaX * 0.1;
+                smoothScroll(currentTranslate);
+            }, { passive: false });
+
+            // Touch/Mouse Navigation
+            track.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.pageX;
+                currentX = currentTranslate;
+            });
+
+            track.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                walk = (e.pageX - startX) * (100/3) / track.offsetWidth;
+                smoothScroll(currentX + walk);
+            });
+
+            track.addEventListener('mouseup', () => {
+                isDragging = false;
+                currentTranslate += walk || 0;
+            });
+
+            track.addEventListener('mouseleave', () => {
+                isDragging = false;
+            });
+
+            // Button Navigation
+            prev.addEventListener('click', () => {
+                currentTranslate += (100/3);
+                smoothScroll(currentTranslate);
+            });
+
+            next.addEventListener('click', () => {
+                currentTranslate -= (100/3);
+                smoothScroll(currentTranslate);
+            });
         });
     </script>
 </body>
