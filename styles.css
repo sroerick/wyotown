@@ -178,16 +178,18 @@ section h2 {
 
 .carousel {
     position: relative;
-    width: 100%;
-    margin: 0 auto;
+    margin: 2rem 0;
+}
+
+.carousel-container {
     overflow: hidden;
-    padding: 0 4rem;
+    position: relative;
+    margin: 0 2rem;
 }
 
 .carousel-track {
     display: flex;
-    gap: 2rem;
-    transition: transform 0.5s ease-out;
+    transition: transform 0.4s ease-out;
     width: 100%;
     cursor: grab;
 }
@@ -197,7 +199,7 @@ section h2 {
 }
 
 .carousel-slide {
-    flex: 0 0 calc(33.333% - 1.33rem);
+    flex: 0 0 33.333%;
     background: white;
     padding: 2rem;
     border-radius: 2px;
@@ -218,36 +220,49 @@ section h2 {
 }
 
 .carousel-nav {
-    display: flex;
-    justify-content: space-between;
     position: absolute;
-    width: calc(100% - 2rem);
+    width: 100%;
     top: 50%;
     transform: translateY(-50%);
-    left: 1rem;
+    display: flex;
+    justify-content: space-between;
     pointer-events: none;
 }
 
 .carousel-nav button {
-    background: var(--primary-color);
-    color: white;
+    background: rgba(0, 0, 0, 0.5);
     border: none;
+    color: white;
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: 50%;
     width: 3rem;
     height: 3rem;
-    border-radius: 50%;
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     pointer-events: auto;
-    transition: opacity 0.3s ease;
-    opacity: 0.8;
 }
 
-.carousel-nav button:hover {
-    opacity: 1;
+.prev {
+    margin-left: -1.5rem;
+}
+
+.next {
+    margin-right: -1.5rem;
+}
+
+@media (max-width: 768px) {
+    .carousel-nav button {
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0.75rem;
+    }
 }
 
 @media (max-width: 1024px) {
     .carousel-slide {
-        flex: 0 0 calc(50% - 1rem);
+        flex: 0 0 50%;
     }
 }
 

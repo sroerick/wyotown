@@ -53,56 +53,58 @@
         <div class="container">
             <h2>Selected Outcomes</h2>
             <div class="carousel">
-                <div class="carousel-track">
-                    <div class="carousel-slide">
-                        <h3>Janitorial Services Growth</h3>
-                        <p class="outcome">500% Revenue Growth in 12 Months</p>
-                        <p>Transformed a 2-person operation into a 15-employee business through strategic systems development and sales pipeline optimization.</p>
-                    </div>
-                    <div class="carousel-slide">
-                        <h3>Dental Practice Optimization</h3>
-                        <p class="outcome">30% Increase in Patient Throughput</p>
-                        <p>Streamlined front desk operations and modernized IT infrastructure while ensuring HIPAA compliance.</p>
-                    </div>
-                    <div class="carousel-slide">
-                        <h3>Chamber of Commerce Mapping</h3>
-                        <p class="outcome">100+ Economic Development Projects</p>
-                        <p>Custom geospatial platform enabling data-driven decision making for business development initiatives.</p>
-                    </div>
-                    <div class="carousel-slide">
-                        <h3>Voter Mobilization Platform</h3>
-                        <p class="outcome">50+ Client Organizations</p>
-                        <p>Scaled analytics platform handling millions of voter records, driving targeted engagement campaigns.</p>
-                    </div>
-                    <div class="carousel-slide">
-                        <h3>Real Estate Investment Tool</h3>
-                        <p class="outcome">$100M+ in LITEC Awards</p>
-                        <p>Geographic scoring system that directly contributed to winning multiple eight-figure tax credit awards.</p>
-                    </div>
-                    <div class="carousel-slide">
-                        <h3>Manufacturing Automation</h3>
-                        <p class="outcome">400% Process Efficiency</p>
-                        <p>IoT solution for beverage manufacturing, integrating hardware control systems with inventory management.</p>
-                    </div>
-                    <div class="carousel-slide">
-                        <h3>Agricultural Data Platform</h3>
-                        <p class="outcome">20,000 Acres Mapped</p>
-                        <p>Custom mapping and data collection platform for precision agriculture, digitizing 20,000 acres of farmland maps.</p>
-                    </div>
-                    <div class="carousel-slide">
-                        <h3>Food Safety Platform</h3>
-                        <p class="outcome">10,000 Tests/Month</p>
-                        <p>Built SCADA system for E. coli monitoring, automating PDF parsing and geocoding for real-time biohazard awareness.</p>
-                    </div>
-                    <div class="carousel-slide">
-                        <h3>Nonprofit Crowdfunding</h3>
-                        <p class="outcome">Platform Migration Success</p>
-                        <p>Developed custom Django-based crowdfunding platform for healthcare assistance, integrating CRM and payment systems.</p>
-                    </div>
-                    <div class="carousel-slide">
-                        <h3>Crypto Publishing System</h3>
-                        <p class="outcome">Server-Free Innovation</p>
-                        <p>Built blockchain-based publishing platform, enabling completely decentralized content delivery.</p>
+                <div class="carousel-container">
+                    <div class="carousel-track">
+                        <div class="carousel-slide">
+                            <h3>Janitorial Services Growth</h3>
+                            <p class="outcome">500% Revenue Growth in 12 Months</p>
+                            <p>Transformed a 2-person operation into a 15-employee business through strategic systems development and sales pipeline optimization.</p>
+                        </div>
+                        <div class="carousel-slide">
+                            <h3>Dental Practice Optimization</h3>
+                            <p class="outcome">30% Increase in Patient Throughput</p>
+                            <p>Streamlined front desk operations and modernized IT infrastructure while ensuring HIPAA compliance.</p>
+                        </div>
+                        <div class="carousel-slide">
+                            <h3>Chamber of Commerce Mapping</h3>
+                            <p class="outcome">100+ Economic Development Projects</p>
+                            <p>Custom geospatial platform enabling data-driven decision making for business development initiatives.</p>
+                        </div>
+                        <div class="carousel-slide">
+                            <h3>Voter Mobilization Platform</h3>
+                            <p class="outcome">50+ Client Organizations</p>
+                            <p>Scaled analytics platform handling millions of voter records, driving targeted engagement campaigns.</p>
+                        </div>
+                        <div class="carousel-slide">
+                            <h3>Real Estate Investment Tool</h3>
+                            <p class="outcome">$100M+ in LITEC Awards</p>
+                            <p>Geographic scoring system that directly contributed to winning multiple eight-figure tax credit awards.</p>
+                        </div>
+                        <div class="carousel-slide">
+                            <h3>Manufacturing Automation</h3>
+                            <p class="outcome">400% Process Efficiency</p>
+                            <p>IoT solution for beverage manufacturing, integrating hardware control systems with inventory management.</p>
+                        </div>
+                        <div class="carousel-slide">
+                            <h3>Agricultural Data Platform</h3>
+                            <p class="outcome">20,000 Acres Mapped</p>
+                            <p>Custom mapping and data collection platform for precision agriculture, digitizing 20,000 acres of farmland maps.</p>
+                        </div>
+                        <div class="carousel-slide">
+                            <h3>Food Safety Platform</h3>
+                            <p class="outcome">10,000 Tests/Month</p>
+                            <p>Built SCADA system for E. coli monitoring, automating PDF parsing and geocoding for real-time biohazard awareness.</p>
+                        </div>
+                        <div class="carousel-slide">
+                            <h3>Nonprofit Crowdfunding</h3>
+                            <p class="outcome">Platform Migration Success</p>
+                            <p>Developed custom Django-based crowdfunding platform for healthcare assistance, integrating CRM and payment systems.</p>
+                        </div>
+                        <div class="carousel-slide">
+                            <h3>Crypto Publishing System</h3>
+                            <p class="outcome">Server-Free Innovation</p>
+                            <p>Built blockchain-based publishing platform, enabling completely decentralized content delivery.</p>
+                        </div>
                     </div>
                 </div>
                 <div class="carousel-nav">
@@ -137,40 +139,62 @@
             const prev = document.querySelector('.prev');
             const next = document.querySelector('.next');
             
-            // Clone first and last slides
-            const firstClone = slides[0].cloneNode(true);
-            const lastClone = slides[slides.length - 1].cloneNode(true);
+            // Clone all slides
+            slides.forEach(slide => {
+                const clone = slide.cloneNode(true);
+                track.appendChild(clone);
+            });
             
-            // Add clones
-            track.appendChild(firstClone);
-            track.insertBefore(lastClone, slides[0]);
+            let slidesPerView = getSlidesPerView();
+            let slideWidth = 100 / slidesPerView;
+            let currentIndex = 0;
+            let isTransitioning = false;
             
-            const slideWidth = 100 / 3;  // Show 3 slides at once
-            let position = slideWidth;    // Start at first real slide
-            
-            // Initial position
-            track.style.transform = `translateX(-${position}%)`;
-            
-            function moveSlides(direction) {
-                track.style.transition = 'transform 0.4s ease-in-out';
-                position += direction * slideWidth;
-                track.style.transform = `translateX(-${position}%)`;
+            function getSlidesPerView() {
+                if (window.innerWidth <= 768) return 1;
+                if (window.innerWidth <= 1024) return 2;
+                return 3;
             }
             
-            // Handle infinite scroll
-            track.addEventListener('transitionend', () => {
-                // If we're at a clone, jump to the real slide without transition
-                if (position >= (slides.length + 1) * slideWidth) {
-                    track.style.transition = 'none';
-                    position = slideWidth;
-                    track.style.transform = `translateX(-${position}%)`;
+            function updateTransform(index) {
+                track.style.transform = `translateX(-${index * slideWidth}%)`;
+            }
+            
+            function moveSlides(direction) {
+                if (isTransitioning) return;
+                isTransitioning = true;
+                
+                currentIndex += direction;
+                track.style.transition = 'transform 0.4s ease-in-out';
+                updateTransform(currentIndex);
+                
+                // If we've reached the cloned section
+                if (currentIndex >= slides.length) {
+                    // Wait for transition to finish, then jump to start
+                    setTimeout(() => {
+                        track.style.transition = 'none';
+                        currentIndex = 0;
+                        updateTransform(currentIndex);
+                        setTimeout(() => {
+                            track.style.transition = 'transform 0.4s ease-in-out';
+                            isTransitioning = false;
+                        }, 10);
+                    }, 400);
+                } else if (currentIndex < 0) {
+                    // Wait for transition to finish, then jump to end
+                    setTimeout(() => {
+                        track.style.transition = 'none';
+                        currentIndex = slides.length - 1;
+                        updateTransform(currentIndex);
+                        setTimeout(() => {
+                            track.style.transition = 'transform 0.4s ease-in-out';
+                            isTransitioning = false;
+                        }, 10);
+                    }, 400);
+                } else {
+                    isTransitioning = false;
                 }
-                if (position === 0) {
-                    track.style.transition = 'none';
-                    position = slides.length * slideWidth;
-                    track.style.transform = `translateX(-${position}%)`;
-                }
-            });
+            }
             
             // Button Navigation
             next.addEventListener('click', () => moveSlides(1));
@@ -186,15 +210,28 @@
                 }
             }, { passive: false });
             
+            // Handle window resize
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    slidesPerView = getSlidesPerView();
+                    slideWidth = 100 / slidesPerView;
+                    updateTransform(currentIndex);
+                }, 100);
+            });
+            
             // Touch/Drag Navigation
             let isDragging = false;
             let startPosition = 0;
-            let currentTranslate = 0;
+            let startIndex = 0;
             
             function dragStart(e) {
+                if (isTransitioning) return;
                 isDragging = true;
                 startPosition = e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
-                currentTranslate = -position;
+                startIndex = currentIndex;
+                track.style.transition = 'none';
             }
             
             function dragMove(e) {
@@ -202,10 +239,8 @@
                 e.preventDefault();
                 
                 const currentPosition = e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
-                const diff = (currentPosition - startPosition) / track.offsetWidth * 100;
-                
-                track.style.transition = 'none';
-                track.style.transform = `translateX(${currentTranslate + diff}%)`;
+                const diff = (currentPosition - startPosition) / track.offsetWidth * slidesPerView;
+                updateTransform(startIndex - diff);
             }
             
             function dragEnd(e) {
@@ -215,12 +250,11 @@
                 const currentPosition = e.type.includes('mouse') ? e.pageX : e.changedTouches[0].clientX;
                 const diff = currentPosition - startPosition;
                 
-                if (Math.abs(diff) > 100) {  // If dragged far enough
+                track.style.transition = 'transform 0.4s ease-in-out';
+                if (Math.abs(diff) > track.offsetWidth / 4) {
                     moveSlides(diff > 0 ? -1 : 1);
                 } else {
-                    // Spring back to original position
-                    track.style.transition = 'transform 0.4s ease-in-out';
-                    track.style.transform = `translateX(-${position}%)`;
+                    updateTransform(currentIndex);
                 }
             }
             
