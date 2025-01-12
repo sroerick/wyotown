@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>wyo.town | Technical Solutions</title>
+    <title>wyo.town  |  Technical Solutions</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -133,77 +133,108 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const track = document.querySelector('.carousel-track');
-            const slides = document.querySelectorAll('.carousel-slide:not(.clone)');
+            const slides = [...document.querySelectorAll('.carousel-slide')];
             const prev = document.querySelector('.prev');
             const next = document.querySelector('.next');
             
-            let currentTranslate = -(100 / 3); // Start at first real slide
-            let isDragging = false;
-            let startX;
-            let currentX;
-            let walk;
+            // Clone first and last slides
+            const firstClone = slides[0].cloneNode(true);
+            const lastClone = slides[slides.length - 1].cloneNode(true);
             
-            // Initialize position
-            track.style.transform = `translateX(${currentTranslate}%)`;
-
-            function smoothScroll(target) {
-                track.style.transition = 'transform 0.5s ease-out';
-                track.style.transform = `translateX(${target}%)`;
-                
-                // Reset position when reaching clone boundaries
-                track.addEventListener('transitionend', () => {
-                    track.style.transition = 'none';
-                    if (target <= -((slides.length + 2) * (100/3))) {
-                        currentTranslate = -(100/3);
-                        track.style.transform = `translateX(${currentTranslate}%)`;
-                    } else if (target >= 0) {
-                        currentTranslate = -(slides.length * (100/3));
-                        track.style.transform = `translateX(${currentTranslate}%)`;
-                    }
-                }, { once: true });
+            // Add clones
+            track.appendChild(firstClone);
+            track.insertBefore(lastClone, slides[0]);
+            
+            const slideWidth = 100 / 3;  // Show 3 slides at once
+            let position = slideWidth;    // Start at first real slide
+            
+            // Initial position
+            track.style.transform = `translateX(-${position}%)`;
+            
+            function moveSlides(direction) {
+                track.style.transition = 'transform 0.4s ease-in-out';
+                position += direction * slideWidth;
+                track.style.transform = `translateX(-${position}%)`;
             }
-
-            // Wheel/Trackpad Navigation
+            
+            // Handle infinite scroll
+            track.addEventListener('transitionend', () => {
+                // If we're at a clone, jump to the real slide without transition
+                if (position >= (slides.length + 1) * slideWidth) {
+                    track.style.transition = 'none';
+                    position = slideWidth;
+                    track.style.transform = `translateX(-${position}%)`;
+                }
+                if (position === 0) {
+                    track.style.transition = 'none';
+                    position = slides.length * slideWidth;
+                    track.style.transform = `translateX(-${position}%)`;
+                }
+            });
+            
+            // Button Navigation
+            next.addEventListener('click', () => moveSlides(1));
+            prev.addEventListener('click', () => moveSlides(-1));
+            
+            // Wheel Navigation
             track.addEventListener('wheel', (e) => {
                 e.preventDefault();
-                currentTranslate -= e.deltaX * 0.1;
-                smoothScroll(currentTranslate);
+                if (e.deltaX > 50) {
+                    moveSlides(1);
+                } else if (e.deltaX < -50) {
+                    moveSlides(-1);
+                }
             }, { passive: false });
-
-            // Touch/Mouse Navigation
-            track.addEventListener('mousedown', (e) => {
+            
+            // Touch/Drag Navigation
+            let isDragging = false;
+            let startPosition = 0;
+            let currentTranslate = 0;
+            
+            function dragStart(e) {
                 isDragging = true;
-                startX = e.pageX;
-                currentX = currentTranslate;
-            });
-
-            track.addEventListener('mousemove', (e) => {
+                startPosition = e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
+                currentTranslate = -position;
+            }
+            
+            function dragMove(e) {
                 if (!isDragging) return;
                 e.preventDefault();
-                walk = (e.pageX - startX) * (100/3) / track.offsetWidth;
-                smoothScroll(currentX + walk);
-            });
-
-            track.addEventListener('mouseup', () => {
+                
+                const currentPosition = e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
+                const diff = (currentPosition - startPosition) / track.offsetWidth * 100;
+                
+                track.style.transition = 'none';
+                track.style.transform = `translateX(${currentTranslate + diff}%)`;
+            }
+            
+            function dragEnd(e) {
+                if (!isDragging) return;
                 isDragging = false;
-                currentTranslate += walk || 0;
-            });
-
-            track.addEventListener('mouseleave', () => {
-                isDragging = false;
-            });
-
-            // Button Navigation
-            prev.addEventListener('click', () => {
-                currentTranslate += (100/3);
-                smoothScroll(currentTranslate);
-            });
-
-            next.addEventListener('click', () => {
-                currentTranslate -= (100/3);
-                smoothScroll(currentTranslate);
-            });
+                
+                const currentPosition = e.type.includes('mouse') ? e.pageX : e.changedTouches[0].clientX;
+                const diff = currentPosition - startPosition;
+                
+                if (Math.abs(diff) > 100) {  // If dragged far enough
+                    moveSlides(diff > 0 ? -1 : 1);
+                } else {
+                    // Spring back to original position
+                    track.style.transition = 'transform 0.4s ease-in-out';
+                    track.style.transform = `translateX(-${position}%)`;
+                }
+            }
+            
+            // Touch Events
+            track.addEventListener('touchstart', dragStart);
+            track.addEventListener('touchmove', dragMove);
+            track.addEventListener('touchend', dragEnd);
+            
+            // Mouse Events
+            track.addEventListener('mousedown', dragStart);
+            track.addEventListener('mousemove', dragMove);
+            track.addEventListener('mouseup', dragEnd);
+            track.addEventListener('mouseleave', dragEnd);
         });
     </script>
 </body>
-</html> 
+</html>
